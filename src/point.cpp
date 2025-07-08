@@ -9,3 +9,6 @@ void Point::setPos(int x, int y) {
     this->x = x;
     this->y = y;
 }
+QPoint Point::getPos() {
+    return QPoint(this->x, this->y);
+}

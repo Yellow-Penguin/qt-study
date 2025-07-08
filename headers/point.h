@@ -8,6 +8,7 @@ public:
     virtual ~Point();
     virtual void draw(QPainter *painter) = 0;
     void setPos(int x, int y);
+    QPoint getPos();
 protected:
     int x, y;
     QColor color;

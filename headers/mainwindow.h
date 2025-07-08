@@ -2,9 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
 #include "point.h"
-
-class DrawingWidget;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -14,8 +13,23 @@ public:
     ~MainWindow();
 
 private:
-    DrawingWidget *canvas;
+    void createMenu();
     Point *figure;
+    QTimer holdTimer;
+    bool mouseHeld;
+    QPoint mousePos;
+
+private slots:
+    void updateFigure();
+    void createSquare();
+    void createTriangle();
+    void createCircle();
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 };
 
 #endif // MAINWINDOW_H

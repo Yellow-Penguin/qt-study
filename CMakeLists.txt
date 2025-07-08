@@ -15,16 +15,16 @@ find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets)
 # Створення виконуваного файлу
 set(SOURCES
         src/main.cpp
-        src/drawingwidget.cpp
         src/mainwindow.cpp
-        src/dot.cpp
+        src/circle.cpp
         src/point.cpp
+        src/square.cpp
 )
 set(HEADERS
         headers/point.h
         headers/mainwindow.h
-        headers/drawingwidget.h
-        headers/dot.h
+        headers/circle.h
+        headers/square.h
 )
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 

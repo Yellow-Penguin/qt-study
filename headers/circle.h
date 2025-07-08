@@ -3,9 +3,9 @@
 
 #include "point.h"
 
-class Dot : public Point {
+class Circle : public Point {
 public:
-    Dot(int x = 0, int y = 0, QColor color = Qt::black);
+    Circle(int x = 0, int y = 0, QColor color = Qt::black);
     void draw(QPainter *painter) override;
 };
 
