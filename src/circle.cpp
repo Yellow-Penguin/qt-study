@@ -1,10 +1,10 @@
 #include "../headers/circle.h"
 #include <QPainter>
 
-Circle::Circle(int x, int y, QColor color)
-    : Point(x, y, color) {}
+Circle::Circle(int x, int y, QColor color, int radius)
+    : Point(x, y, color), radius(radius) {}
 
 void Circle::draw(QPainter *painter) {
     painter->setBrush(color);
-    painter->drawEllipse(QPoint(x, y), 6, 6);
+    painter->drawEllipse(QPoint(x, y), radius, radius);
 }
