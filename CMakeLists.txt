@@ -19,12 +19,14 @@ set(SOURCES
         src/circle.cpp
         src/point.cpp
         src/square.cpp
+        src/triangle.cpp
 )
 set(HEADERS
         headers/point.h
         headers/mainwindow.h
         headers/circle.h
         headers/square.h
+        headers/triangle.h
 )
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 

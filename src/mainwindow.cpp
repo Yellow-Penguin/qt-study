@@ -3,6 +3,9 @@
 #include <QTimer>
 #include <QMouseEvent>
 #include "../headers/mainwindow.h"
+
+#include "../headers/triangle.h"
+#include "../headers/square.h"
 #include "../headers/circle.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -37,20 +40,21 @@ void MainWindow::paintEvent(QPaintEvent *event) {
     }
 }
 
-
 void MainWindow::createCircle() {
     delete figure;
-    figure = new Circle(100, 100, Qt::black);
+    figure = new Circle(400, 300, Qt::darkYellow, 20);
     update();
 }
 
 void MainWindow::createTriangle() {
     delete figure;
+    figure = new Triangle(400, 300, Qt::darkRed, 40);
     update();
 }
 
 void MainWindow::createSquare() {
     delete figure;
+    figure = new Square(400, 300, Qt::darkGreen, 40);
     update();
 }
 
@@ -77,8 +81,10 @@ void MainWindow::updateFigure() {
     if (!mouseHeld) {
         return;
     }
-    QPoint figurePos = figure->getPos();
-    QPointF delta = (mousePos - figurePos) * 0.1;
-    figure->setPos(figurePos.x() + delta.x(), figurePos.y() + delta.y());
-    update();
+    if (figure) {
+        QPoint figurePos = figure->getPos();
+        QPointF delta = (mousePos - figurePos) * 0.1;
+        figure->setPos(figurePos.x() + delta.x(), figurePos.y() + delta.y());
+        update();
+    }
 }

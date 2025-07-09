@@ -6,5 +6,5 @@ Square::Square(int x, int y, QColor color, int size)
 
 void Square::draw(QPainter *painter) {
     painter->setBrush(color);
-    painter->drawRect(QRect(QPoint(x, y), QSize(figSize, figSize)));
+    painter->drawRect(QRect(QPoint(x-figSize/2.0, y-figSize/2.0), QSize(figSize, figSize)));
 }
