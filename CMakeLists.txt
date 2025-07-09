@@ -19,7 +19,7 @@ set(SOURCES
         src/circle.cpp
         src/point.cpp
         src/square.cpp
-        headers/triangle.h
+        src/triangle.cpp
 )
 set(HEADERS
         headers/point.h
