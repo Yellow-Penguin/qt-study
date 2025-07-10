@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include <QTimer>
-#include <vector>
+#include <QVector>
+#include <random>
 #include "point.h"
 
 class MainWindow : public QMainWindow {
@@ -16,7 +17,8 @@ public:
 private:
     void createMenu();
     Point *figure;
-    std::vector<Point*> figures;
+    QVector<Point*> figures;
+    static std::mt19937 gen;
     QTimer holdTimer;
     bool mouseHeld;
     QPoint mousePos;

@@ -1,5 +1,5 @@
-#ifndef DOT_H
-#define DOT_H
+#ifndef CIRCLE_H
+#define CIRCLE_H
 
 #include "point.h"
 
@@ -11,4 +11,4 @@ private:
     int radius;
 };
 
-#endif // DOT_H
+#endif // CIRCLE_H

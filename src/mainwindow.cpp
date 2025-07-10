@@ -1,13 +1,20 @@
 #include <QMenuBar>
 #include <QMouseEvent>
 #include <random>
+#include <chrono>
 #include "../headers/mainwindow.h"
 #include "../headers/triangle.h"
 #include "../headers/square.h"
 #include "../headers/circle.h"
 
+std::mt19937 MainWindow::gen{
+    static_cast<unsigned>(
+        std::chrono::system_clock::now().time_since_epoch().count()
+    )
+};
+
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), figure(nullptr), mousePos(QPoint(0, 0))
+    : QMainWindow(parent), figure(nullptr), mouseHeld(false), mousePos(QPoint(0, 0))
 {
     holdTimer.setInterval(16);
     connect(&holdTimer, &QTimer::timeout, this, &MainWindow::updateFigure);
@@ -38,18 +45,30 @@ void MainWindow::createMenu() {
 
 void MainWindow::createCircle() {
     delete figure;
+    for (Point* f : figures) {
+        delete f;
+    }
+    figures.clear();
     figure = new Circle(400, 300, Qt::darkYellow, 20);
     update();
 }
 
 void MainWindow::createTriangle() {
     delete figure;
+    for (Point* f : figures) {
+        delete f;
+    }
+    figures.clear();
     figure = new Triangle(400, 300, Qt::darkRed, 40);
     update();
 }
 
 void MainWindow::createSquare() {
     delete figure;
+    for (Point* f : figures) {
+        delete f;
+    }
+    figures.clear();
     figure = new Square(400, 300, Qt::darkGreen, 40);
     update();
 }
@@ -61,6 +80,7 @@ void MainWindow::randomMode() {
         delete f;
     }
     figures.clear();
+    update();
 }
 
 void MainWindow::paintEvent(QPaintEvent *event) {
@@ -70,29 +90,37 @@ void MainWindow::paintEvent(QPaintEvent *event) {
     }
     if (!figures.empty()) {
         for (Point* f : figures) {
-            f->draw(&painter);
+            if (f) {
+                f->draw(&painter);
+            }
         }
     }
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
+        for (Point* f : figures) {
+            delete f;
+        }
+        figures.clear();
         mouseHeld = true;
         holdTimer.start();
         mousePos = event->pos();
     }
+    update();
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event) {
     mousePos = event->pos();
 
     if (mouseHeld && figure == nullptr && figures.size() < 20) {
-        static std::mt19937 gen{std::random_device{}()};
         std::uniform_int_distribution<int> dist(0, 2);
+        std::uniform_int_distribution<int> hue(0, 359);
+        std::uniform_int_distribution<int> sizeDist(20, 40);
 
         Point* newFigure = nullptr;
-        QColor color = QColor::fromHsv(rand() % 360, 255, 200);
-        int size = 20 + rand() % 20;
+        QColor color = QColor::fromHsv(hue(gen), 255, 200);
+        int size = sizeDist(gen);
 
         switch (dist(gen)) {
             case 0:
@@ -105,8 +133,9 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event) {
                 newFigure = new Square(mousePos.x(), mousePos.y(), color, size);
                 break;
         }
-
-        figures.push_back(newFigure);
+        if (newFigure) {
+            figures.push_back(newFigure);
+        }
     }
 }
 
@@ -114,26 +143,36 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         mouseHeld = false;
         holdTimer.stop();
+        for (Point* f : figures) {
+            delete f;
+        }
+        figures.clear();
+        update();
     }
 }
 
 void MainWindow::updateFigure() {
+    QPoint currPos, prevPos;
+    QPointF delta;
     if (!mouseHeld) {
         return;
     }
     if (figure) {
-        QPoint figurePos = figure->getPos();
-        QPointF delta = (mousePos - figurePos) * 0.1;
-        figure->setPos(figurePos.x() + delta.x(), figurePos.y() + delta.y());
+        currPos = figure->getPos();
+        delta = (mousePos - currPos) * 0.1;
+        figure->setPos(currPos.x() + delta.x(), currPos.y() + delta.y());
         update();
     }
     if (!figures.empty()) {
         for (int i = figures.size() - 1; i > 0; --i) {
-            QPoint prevPos = figures[i - 1]->getPos();
-            figures[i]->setPos(prevPos.x(), prevPos.y());
+            prevPos = figures[i - 1]->getPos();
+            currPos = figures[i]->getPos();
+            delta = (prevPos - currPos) * 0.3;
+            figures[i]->setPos(currPos.x() + delta.x(), currPos.y() + delta.y());
         }
-
-        figures[0]->setPos(mousePos.x(), mousePos.y());
+        currPos = figures[0]->getPos();
+        delta = (mousePos - currPos) * 0.3;
+        figures[0]->setPos(currPos.x() + delta.x(), currPos.y() + delta.y());
         update();
     }
 }
