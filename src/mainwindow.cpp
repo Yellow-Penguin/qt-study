@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     setMinimumSize(800, 600);
     createMenu();
     setMouseTracking(true);
+    createCircle();
 }
 
 MainWindow::~MainWindow() {
