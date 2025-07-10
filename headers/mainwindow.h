@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QVector>
+#include <random>
 #include "point.h"
 
 class MainWindow : public QMainWindow {
@@ -15,6 +17,8 @@ public:
 private:
     void createMenu();
     Point *figure;
+    QVector<Point*> figures;
+    static std::mt19937 gen;
     QTimer holdTimer;
     bool mouseHeld;
     QPoint mousePos;
@@ -24,6 +28,7 @@ private slots:
     void createSquare();
     void createTriangle();
     void createCircle();
+    void randomMode();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
